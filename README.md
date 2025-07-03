@@ -91,9 +91,24 @@ In this exercise you will:
 #### Reflection Questions
 
 1. **How do you link `prev` and `next` pointers correctly using a static array?**
+   Man verwendet ein statisches Array nodes[5], das alle Listenelemente enthält.
+Jedes Element zeigt mit prev auf das vorherige Element im Array (außer beim ersten, dort NULL) und mit next auf das nächste Element (außer beim letzten, dort NULL).
+Dadurch sind alle Zeiger gültig, weil die Elemente im Speicher nebeneinander liegen.
 2. **What are advantages and limitations of compile-time vs. dynamic allocation?**
+   -Vorteile der statischen Allokation:
+Speicher wird zur Kompilierzeit reserviert.
+Keine Fragmentierung oder Speicherlecks.
+Einfachere Verwaltung, besonders in eingebetteten Systemen.
+-Nachteile der statischen Allokation:
+Feste Größe, nicht zur Laufzeit änderbar.
+Weniger flexibel für Datenstrukturen, deren Größe sich ändern kann.
+-Dynamische Allokation Vorteile:
+Flexibel, passt sich an Laufzeitbedürfnisse an.
+Ermöglicht das Erstellen von variablen Datenstrukturen.
+-Dynamische Allokation Nachteile:
+Komplexere Speicherverwaltung (malloc/free).
+Gefahr von Speicherlecks oder Fragmentierung.
 3. **How would you extend this static list to include additional data fields?**
-
 ---
 
 ### Task 2: Interactive Singly Linked List
@@ -159,9 +174,10 @@ In this exercise you will:
 #### Reflection Questions
 
 1. **Why is `malloc` necessary when adding nodes dynamically?**
+   malloc reserviert zur Laufzeit Speicher im Heap, wodurch dynamisch so viele Knoten erzeugt werden können, wie benötigt. Ohne malloc wäre man auf statischen oder lokalen Speicher beschränkt, was keine flexible Listengröße erlaubt.
 2. **How can you traverse the list to print each node’s address and value?**
 3. **What are the consequences of not freeing the list before exit?**
-
+   Wird der zugewiesene Speicher nicht mit free freigegeben, entstehen Speicherlecks. Dies kann Ressourcenverknappung, Programmabstürze oder undefiniertes Verhalten verursachen, besonders bei langlaufenden Programmen oder eingebetteten Systemen.
 ---
 
 ### Task 3: JSON Array to Linked List
@@ -244,9 +260,17 @@ gcc -o solutions/json_main solutions/json_main.c solutions/json_list.o -ljansson
 #### Reflection Questions
 
 1. **How does using `getopt` make the program more flexible than `argv[1]`?**
+   getopt erlaubt die flexible und übersichtliche Verarbeitung von Kommandozeilenoptionen.
+Man kann Optionen in beliebiger Reihenfolge übergeben, nicht nur eine feste Position (z.B. nicht nur argv[1]).
+Es unterstützt auch optionale oder mehrere Parameter.
+Dadurch ist das Programm benutzerfreundlicher und leichter erweiterbar.
 2. **What happens if the user omits the `-i` option?**
+   Das Programm ruft die usage()-Funktion auf, zeigt eine Fehlermeldung und beendet sich.
+Ohne Angabe der Eingabedatei kann das Programm nicht wissen, welche JSON-Datei es laden soll, deshalb wird der Nutzer darauf hingewiesen.
 3. **How can you validate that the JSON file loaded is indeed an array?**
-
+Nach json_load_file() prüft man den Typ des Wurzelobjekts mit json_typeof(root).
+Nur wenn json_typeof(root) == JSON_ARRAY ist, fährt man mit dem Parsen fort.
+Andernfalls gibt man eine Fehlermeldung aus und beendet das Programm oder gibt einen Fehler zurück.
 ---
 
 **Remember:** Stop after **90 minutes** and record where you stopped.
